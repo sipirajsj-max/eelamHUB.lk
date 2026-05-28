@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin Core | EelamHUB.lk</title>
+    <link rel="icon" href="../logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           1. ROOT SYSTEM & ADMIN THEME (Deep Red & Cyber Dark Neon)
+           ========================================================================== */
+        :root {
+            --primary: #ff3366; /* Admin Warning Alert Crimson Red */
+            --accent: #00d4ff;
+            --dark-bg: #0b0f19;
+            --card-bg: #151f32;
+            --glass: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #facc15;
+            --sidebar-width: 260px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--dark-bg); color: var(--text-main); min-height: 100vh; display: flex; }
+
+        /* ==========================================================================
+           2. SIDEBAR CONTROLS
+           ========================================================================== */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--card-bg);
+            border-right: 1px solid var(--glass);
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            padding: 25px 20px;
+            z-index: 10;
+        }
+        .sidebar .logo { font-size: 1.5rem; font-weight: 700; color: #fff; text-decoration: none; margin-bottom: 40px; }
+        .sidebar .logo span { color: var(--primary); }
+        .admin-badge { background: rgba(255, 51, 102, 0.1); color: var(--primary); font-size: 0.75rem; padding: 3px 10px; border-radius: 30px; font-weight: 600; display: inline-block; margin-top: -35px; margin-bottom: 30px; text-align: center; border: 1px solid rgba(255, 51, 102, 0.2); }
+
+        .nav-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .nav-item { cursor: pointer; }
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-item.active a, .nav-item a:hover {
+            background: rgba(255, 51, 102, 0.08);
+            color: var(--primary);
+        }
+        .sidebar-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--glass); }
+
+        /* ==========================================================================
+           3. MAIN PANEL SYSTEM
+           ========================================================================== */
+        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 40px; }
+        .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; border-bottom: 1px solid var(--glass); padding-bottom: 20px; }
+        .welcome-box h1 { font-size: 1.8rem; font-weight: 600; }
+        
+        .tab-view { display: none; animation: fadeIn 0.4s ease; }
+        .tab-view.active-view { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Matrix Statistics Metrics */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .stat-card { background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--glass); display: flex; align-items: center; justify-content: space-between; }
+        .stat-details h3 { font-size: 2rem; font-weight: 700; }
+        .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; background: rgba(0, 212, 255, 0.1); color: var(--accent); }
+
+        /* Data Tables & Panels */
+        .table-panel { background: var(--card-bg); padding: 30px; border-radius: 24px; border: 1px solid var(--glass); margin-top: 20px; position: relative; }
+        .panel-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 25px; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .panel-title i { color: var(--primary); }
+
+        .admin-table-wrapper { overflow-x: auto; }
+        .admin-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .admin-table th, .admin-table td { padding: 15px; border-bottom: 1px solid var(--glass); font-size: 0.9rem; transition: all 0.4s ease; }
+        .admin-table th { color: var(--text-dim); font-weight: 500; background: rgba(0,0,0,0.15); }
+        
+        /* Smooth Fade Row Animation */
+        .fade-out { opacity: 0; transform: translateX(-20px); background: rgba(239, 68, 68, 0.1) !important; }
+
+        /* Professional Status Badges */
+        .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+        .badge-pending { background: rgba(250, 204, 21, 0.1); color: var(--warning); border: 1px solid rgba(250, 204, 21, 0.2); }
+        .badge-seeker { background: rgba(0, 212, 255, 0.1); color: var(--accent); border: 1px solid rgba(0, 212, 255, 0.2); }
+        .badge-recruiter { background: rgba(255, 51, 102, 0.1); color: var(--primary); border: 1px solid rgba(255, 51, 102, 0.2); }
+
+        /* Interactive Action Buttons */
+        .btn-action-sm { border: none; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.2s; margin-right: 5px; }
+        .btn-approve { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid var(--success); }
+        .btn-approve:hover { background: var(--success); color: #000; }
+        .btn-reject { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid var(--danger); }
+        .btn-reject:hover { background: var(--danger); color: #fff; }
+        
+        /* Configuration UI Toggles */
+        .config-card { background: var(--dark-bg); border: 1px solid var(--glass); padding: 20px; border-radius: 14px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #334155; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        /* Empty State Styling */
+        .empty-placeholder { text-align: center; padding: 40px 20px; color: var(--text-dim); font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <a href="#" class="logo">EelamHUB<span>.admin</span></a>
+        <div class="admin-badge">Root Administrator</div>
+        
+        <ul class="nav-links">
+            <li class="nav-item active" id="nav-dash" onclick="switchAdminTab('overview')">
+                <a href="#"><i class="fas fa-terminal"></i> <span>Console Overview</span></a>
+            </li>
+            <li class="nav-item" id="nav-approvals" onclick="switchAdminTab('approvals')">
+                <a href="#"><i class="fas fa-user-shield"></i> <span>Client Vetting</span></a>
+            </li>
+            <li class="nav-item" id="nav-users" onclick="switchAdminTab('users')">
+                <a href="#"><i class="fas fa-users-cog"></i> <span>Manage Nodes</span></a>
+            </li>
+            <li class="nav-item" id="nav-settings" onclick="switchAdminTab('settings')">
+                <a href="#"><i class="fas fa-sliders-h"></i> <span>System Settings</span></a>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <a href="recruiter_auth.html" style="color: var(--danger); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 10px;"><i class="fas fa-power-off"></i> Terminate Session</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="dash-header">
+            <div class="welcome-box">
+                <h1>Central Management Core</h1>
+                <p style="color: var(--text-dim); font-size: 0.85rem;">System status: <span style="color: var(--success); font-weight:600;">Operational</span> • Gateway Node Active</p>
+            </div>
+            <!-- லைவ் டிஜிட்டல் கடிகாரமாக மாற்றப்பட்டுள்ளது -->
+            <div style="font-size: 0.9rem; color: var(--text-dim);" id="live-server-clock">
+                <i class="far fa-clock"></i> Server Time: Syncing...
+            </div>
+        </header>
+
+        <div id="view-overview" class="tab-view active-view">
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-details">
+                        <h3>1,420</h3>
+                        <p style="color: var(--text-dim); font-size: 0.8rem;">Job Seekers</p>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-details">
+                        <h3>312</h3>
+                        <p style="color: var(--text-dim); font-size: 0.8rem;">Corporate Clients</p>
+                    </div>
+                    <div class="stat-icon" style="color:var(--primary); background:rgba(255,51,102,0.1);"><i class="fas fa-building"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-details">
+                        <h3>849</h3>
+                        <p style="color: var(--text-dim); font-size: 0.8rem;">Live Postings</p>
+                    </div>
+                    <div class="stat-icon" style="color:var(--warning); background:rgba(250,204,21,0.1);"><i class="fas fa-briefcase"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-details">
+                        <h3 id="pending-counter-badge" style="color: var(--danger);">2</h3>
+                        <p style="color: var(--text-dim); font-size: 0.8rem;">Pending Approvals</p>
+                    </div>
+                    <div class="stat-icon" style="color:var(--danger); background:rgba(239,68,68,0.1);"><i class="fas fa-exclamation-triangle"></i></div>
+                </div>
+            </section>
+
+            <div class="table-panel">
+                <div class="panel-title"><i class="fas fa-history"></i> Real-time System Security Logs</div>
+                <div style="font-family: monospace; font-size: 0.85rem; color: #38bdf8; line-height: 1.8;">
+                    [INFO] 21:45:02 - Google OAuth routing successful for node recruiter_session_9281.<br>
+                    [WARN] 21:47:11 - Client verification payload rejected for BRN PV-99214 (Invalid Checksum).<br>
+                    [INFO] 21:50:00 - Database garbage collection pipeline executed completely.
+                </div>
+            </div>
+        </div>
+
+        <div id="view-approvals" class="tab-view">
+            <div class="table-panel">
+                <div class="panel-title"><i class="fas fa-user-check"></i> Pending Recruiter Sign-up Verifications</div>
+                <div class="admin-table-wrapper" id="approvals-table-container">
+                    <table class="admin-table" id="approvals-table">
+                        <thead>
+                            <tr>
+                                <th>Company / Contact</th>
+                                <th>BRN Number</th>
+                                <th>WhatsApp / Mobiles</th>
+                                <th>Addresses (Work & Legal)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="row-client-1">
+                                <td>
+                                    <strong>Sipiraj Solutions</strong><br>
+                                    <small style="color: var(--text-dim);">sipirajsj@gmail.com</small>
+                                </td>
+                                <td><code>PV-123456</code></td>
+                                <td>
+                                    <span style="color: var(--accent);"><i class="fab fa-whatsapp"></i> +94771234567</span><br>
+                                    <small style="color: var(--text-dim);">Biz: +94112233445</small>
+                                </td>
+                                <td>
+                                    <small><strong>Work:</strong> 12, Main St, Jaffna</small><br>
+                                    <small style="color: var(--text-dim);"><strong>Legal:</strong> Head Office, Jaffna</small>
+                                </td>
+                                <td>
+                                    <button class="btn-action-sm btn-approve" onclick="processApproval(1, 'Approved')">Approve</button>
+                                    <button class="btn-action-sm btn-reject" onclick="processApproval(1, 'Rejected')">Reject</button>
+                                </td>
+                            </tr>
+                            <tr id="row-client-2">
+                                <td>
+                                    <strong>Eelam Tech Corp</strong><br>
+                                    <small style="color: var(--text-dim);">hr@eelamtech.com</small>
+                                </td>
+                                <td><code>PV-987654</code></td>
+                                <td>
+                                    <span style="color: var(--accent);"><i class="fab fa-whatsapp"></i> +94779998887</span><br>
+                                    <small style="color: var(--text-dim);">Biz: +94212223334</small>
+                                </td>
+                                <td>
+                                    <small><strong>Work:</strong> Tech Hub, Vavuniya</small><br>
+                                    <small style="color: var(--text-dim);"><strong>Legal:</strong> Legal Block, Colombo 03</small>
+                                </td>
+                                <td>
+                                    <button class="btn-action-sm btn-approve" onclick="processApproval(2, 'Approved')">Approve</button>
+                                    <button class="btn-action-sm btn-reject" onclick="processApproval(2, 'Rejected')">Reject</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-users" class="tab-view">
+            <div class="table-panel">
+                <div class="panel-title"><i class="fas fa-users"></i> Registered Platform Accounts Database</div>
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>User Node</th>
+                                <th>Classification Group</th>
+                                <th>Registered Timestamp</th>
+                                <th>Operational Flag</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="row-user-1">
+                                <td>John Doe (john@gmail.com)</td>
+                                <td><span class="status-badge badge-seeker">Job Seeker</span></td>
+                                <td>2026-05-26 14:22</td>
+                                <td><button class="btn-action-sm btn-reject" style="padding: 3px 10px;" onclick="confirmAction('row-user-1', 'User Node Blocked.')">Ban User</button></td>
+                            </tr>
+                            <tr id="row-user-2">
+                                <td>Sipiraj (sipirajsj@gmail.com)</td>
+                                <td><span class="status-badge badge-recruiter">Recruiter</span></td>
+                                <td>2026-05-27 09:15</td>
+                                <td><button class="btn-action-sm btn-reject" style="padding: 3px 10px;" onclick="confirmAction('row-user-2', 'Recruiter Workspace Restricted.')">Ban Client</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-settings" class="tab-view">
+            <div class="table-panel">
+                <div class="panel-title"><i class="fas fa-cogs"></i> Global Infrastructure Toggles</div>
+                
+                <div class="config-card">
+                    <div>
+                        <h4>Global Registration Pipeline</h4>
+                        <p style="color: var(--text-dim); font-size:0.8rem;">Allow new Job Seekers and Recruiters to sign up.</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked onchange="toggleSettingNotify('Registration Pipeline')">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="config-card">
+                    <div>
+                        <h4>System Production Maintenance Mode</h4>
+                        <p style="color: var(--text-dim); font-size:0.8rem;">Locks the frontend application and routes users to a maintenance screen.</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" onchange="toggleSettingNotify('Maintenance Mode')">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Tab Router Script
+        function switchAdminTab(tabKey) {
+            document.querySelectorAll('.tab-view').forEach(view => view.classList.remove('active-view'));
+            document.querySelectorAll('.nav-links .nav-item').forEach(item => item.classList.remove('active'));
+            
+            document.getElementById(`view-${tabKey}`).classList.add('active-view');
+            
+            if(tabKey === 'overview') document.getElementById('nav-dash').classList.add('active');
+            if(tabKey === 'approvals') document.getElementById('nav-approvals').classList.add('active');
+            if(tabKey === 'users') document.getElementById('nav-users').classList.add('active');
+            if(tabKey === 'settings') document.getElementById('nav-settings').classList.add('active');
+        }
+
+        // Professional Approval Logic Engine with Fade Animation & Empty State Handling
+        function processApproval(clientId, statusString) {
+            const actionText = statusString === 'Approved' ? 'APPROVE' : 'REJECT';
+            
+            if(confirm(`Are you sure you want to ${actionText} Client Node [ID: ${clientId}]?`)) {
+                // Remove row from UI smoothly using CSS transitions
+                const targetRow = document.getElementById(`row-client-${clientId}`);
+                if(targetRow) {
+                    targetRow.classList.add('fade-out');
+                    setTimeout(() => {
+                        targetRow.remove();
+                        checkEmptyApprovals(); // Check if table is empty to update UI
+                    }, 400);
+                }
+
+                // Update Header Warning Count Badge
+                let currentPending = parseInt(document.getElementById('pending-counter-badge').innerText);
+                if(currentPending > 0) {
+                    document.getElementById('pending-counter-badge').innerText = currentPending - 1;
+                }
+            }
+        }
+
+        // Empty Table Checker for Client Vetting
+        function checkEmptyApprovals() {
+            const tableBody = document.querySelector('#approvals-table tbody');
+            const container = document.getElementById('approvals-table-container');
+            
+            if (tableBody && tableBody.children.length === 0) {
+                container.innerHTML = '<div class="empty-placeholder"><i class="fas fa-check-circle" style="color: var(--success); margin-right: 8px;"></i> No pending recruiter verifications available.</div>';
+            }
+        }
+
+        // Professional Ban/Restriction Alert Box Confirmation
+        function confirmAction(rowId, message) {
+            if(confirm("CRITICAL WARNING: Are you sure you want to restrict/ban this node architecture from the database?")) {
+                alert(message);
+                const row = document.getElementById(rowId);
+                if(row) {
+                    row.classList.add('fade-out');
+                    setTimeout(() => row.remove(), 400);
+                }
+            }
+        }
+
+        // System Settings Architecture Warning Switch
+        function toggleSettingNotify(settingName) {
+            alert(`Security Node Alert: Toggling [${settingName}] structural firewalls alters live production network pipelines.`);
+        }
+
+        // Real-time Professional Server Clock Logic
+        function updateServerClock() {
+            const clockElement = document.getElementById('live-server-clock');
+            const now = new Date();
+            
+            // formatting parameters
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            clockElement.innerHTML = `<i class="far fa-clock"></i> Server Time: ${year}.${month}.${day} | ${hours}:${minutes}:${seconds}`;
+        }
+
+        // Initialize systems on layout render
+        document.addEventListener("DOMContentLoaded", () => {
+            setInterval(updateServerClock, 1000); // 1 நொடிக்கு ஒருமுறை கடிகாரம் புதுப்பிக்கப்படும்
+            updateServerClock();
+        });
+    </script>
+</body>
+</html>

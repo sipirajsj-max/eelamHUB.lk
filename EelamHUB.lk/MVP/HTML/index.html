@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EelamHUB.lk || Premium Local Job Portal & Freelance Marketplace</title>
+    
+    <meta name="description" content="Connecting top employers and best local talents across the region on one secure digital ecosystem.">
+    
+    <link rel="icon" href="logo.png" type="image/png">
+    
+    <link rel="stylesheet" href="../CSS/index.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght=400;700&family=Noto+Sans+Tamil:wght=400;700&family=Poppins:wght=400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- HEADER SECTION -->
+    <header>
+        <div class="container navbar">
+            <a href="#top_anchor" class="logo_wrapper">
+                <div class="logo">EelamHUB<span>.lk</span></div>
+            </a>
+            
+            <div class="nav_controls">
+                <!-- மொபைல் மெனுவிற்கான Hamburger பட்டன் -->
+                <button class="mobile_menu_toggle" aria-label="Toggle Navigation Menu" onclick="toggleMobileMenu()">☰</button>
+
+                <div class="lang_bar" id="langBar">
+                    <button onclick="changeLanguage('ta')" id="btn-ta" class="lang_btn">தமிழ்</button>
+                    <button onclick="changeLanguage('en')" id="btn-en" class="lang_btn active">English</button>
+                    <button onclick="changeLanguage('si')" id="btn-si" class="lang_btn">සිංහල</button>
+                </div>
+                
+                <a href="../HTML/login.html" class="login_btn" id="nav-login">Login</a>
+                <a href="#contact_footer" class="contact_btn">Contact Us</a>
+            </div>
+        </div>
+    </header>
+    
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="top_anchor">
+        <div class="container hero_content">
+            <img src="../logo.png" alt="EelamHUB Logo" width="300px" class="hero_logo">
+            
+            <h1 id="hero-title">Find Your <br> Dream Job <span>in Your Homeland</span>!</h1>
+            <p id="hero-desc">Connecting top employers and best talents across Eelam on one digital platform.</p>
+            
+            <!-- புதிய சேர்க்கை: முகப்பு பக்க தேடல் பட்டி (Main Search Bar) -->
+            <div class="main_search_bar">
+                <form action="search_results.php" method="GET" class="search_form">
+                    <input type="text" name="keyword" placeholder="Job title, skills, or company..." required>
+                    <select name="location">
+                        <option value="">Select Region</option>
+                        <option value="jaffna">Jaffna</option>
+                        <option value="kilinochchi">Kilinochchi</option>
+                        <option value="mullaitivu">Mullaitivu</option>
+                        <option value="vavuniya">Vavuniya</option>
+                        <option value="mannar">Mannar</option>
+                        <option value="batticaloa">Batticaloa</option>
+                        <option value="trincomalee">Trincomalee</option>
+                    </select>
+                    <button type="submit" class="search_btn">Search Jobs</button>
+                </form>
+            </div>
+
+            <a href="#explore_districts" class="primary_btn" id="hero-btn">Explore Jobs by Region</a>
+       
+            <!-- Backend டேட்டா கவுண்டர் -->
+            <div class="hero_stats">
+                <div class="stat_item">
+                    <h2 class="counter" data-target="<?php echo $active_jobs; ?>"><?php echo $active_jobs; ?></h2>
+                    <p class="stat_title">Active Jobs</p>
+                </div>
+                <div class="stat_divider"></div>
+                <div class="stat_item">
+                    <h2 class="counter" data-target="<?php echo $verified_companies; ?>"><?php echo $verified_companies; ?></h2>
+                    <p class="stat_title">Verified Companies</p>
+                </div>
+                <div class="stat_divider"></div>
+                <div class="stat_item">
+                    <h2 class="counter" data-target="<?php echo $registered_talents; ?>"><?php echo $registered_talents; ?></h2>
+                    <p class="stat_title">Talents Registered</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- பிரபலமான உள்ளூர் வேலைப் பிரிவுகள் (Popular Local Categories) -->
+<section class="categories_section">
+    <div class="container">
+        <div class="section_header">
+            <h2 id="cat-title">Popular Categories</h2>
+            <p id="cat-desc">Browse jobs by your professional expertise</p>
+        </div>
+        
+        <div class="categories_grid">
+            <!-- Category 1: Mason -->
+            <div class="category_card">
+                <div class="icon_wrapper">🧱</div>
+                <h3 id="cat-mason">Mason</h3>
+            </div>
+            
+            <!-- Category 2: Carpenter -->
+            <div class="category_card">
+                <div class="icon_wrapper">🪚</div>
+                <h3 id="cat-carpenter">Carpenter</h3>
+            </div>
+            
+            <!-- Category 3: Plumber -->
+            <div class="category_card">
+                <div class="icon_wrapper">🪠</div>
+                <h3 id="cat-plumber">Plumber</h3>
+            </div>
+            
+            <!-- Category 4: Cleaning -->
+            <div class="category_card">
+                <div class="icon_wrapper">🧹</div>
+                <h3 id="cat-cleaning">Cleaning</h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- REGIONS SECTION -->
+    <section class="districts_section" id="explore_districts">
+        <div class="container">
+            <div class="section_header">
+                <h2>Explore by Region</h2>
+                <p>Find local opportunities and freelance gigs in your home district</p>
+            </div>
+
+            <div class="districts_grid">
+                
+                <a href="#jaffna-jobs" class="district_card">
+                    <div class="card_bg" style="background-image: url('../img/jaffna.jpg');"></div>
+                    <div class="card_overlay"></div>
+                    <div class="card_content">
+                        <h3>Jaffna</h3>
+                        <p class="job_count">450+ Active Jobs</p>
+                    </div>
+                </a>
+
+                <a href="#mullaitivu-jobs" class="district_card">
+                    <div class="card_bg" style="background-image: url('../img/mullaitivu.jpg');"></div>
+                    <div class="card_overlay"></div>
+                    <div class="card_content">
+                        <h3>Mullaitivu</h3>
+                        <p class="job_count">180+ Active Jobs</p>
+                    </div>
+                </a>
+
+                <a href="#kilinochchi-jobs" class="district_card">
+                    <div class="card_bg" style="background-image: url('../img/kilinochchi.jpg');"></div>
+                    <div class="card_overlay"></div>
+                    <div class="card_content">
+                        <h3>Kilinochchi</h3>
+                        <p class="job_count">220+ Active Jobs</p>
+                    </div>
+                </a>
+
+                <a href="#vavuniya-jobs" class="district_card">
+                    <div class="card_bg" style="background-image: url('../img/vavuniya.jpg');"></div>
+                    <div class="card_overlay"></div>
+                    <div class="card_content">
+                        <h3>Vavuniya</h3>
+                        <p class="job_count">290+ Active Jobs</p>
+                    </div>
+                </a>
+
+                <a href="#mannar-jobs" class="district_card">
+                    <div class="card_bg" style="background-image: url('../img/mannar.jpg');"></div>
+                    <div class="card_overlay"></div>
+                    <div class="card_content">
+                        <h3>Mannar</h3>
+                        <p class="job_count">130+ Active Jobs</p>
+                    </div>
+                </a>
+
+                <a href="#batticaloa-jobs" class="district_card">
+                    <div class="card_bg" style="background-image: url('../img/batticaloa.jpg');"></div>
+                    <div class="card_overlay"></div>
+                    <div class="card_content">
+                        <h3>Batticaloa</h3>
+                        <p class="job_count">310+ Active Jobs</p>
+                    </div>
+                </a>
+
+                <a href="#trincomalee-jobs" class="district_card">
+                    <div class="card_bg" style="background-image: url('../img/thirukonamalai.jpg');"></div>
+                    <div class="card_overlay"></div>
+                    <div class="card_content">
+                        <h3>Trincomalee</h3>
+                        <p class="job_count">260+ Active Jobs</p>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- HOW IT WORKS SECTION -->
+    <section id="strategies" class="strategies">
+        <div class="container">
+            <h2 class="section_title" id="main-title">How Eelam Hub Works</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <div class="card_num">01</div>
+                    <h3 id="card1-title">Create Profile</h3>
+                    <p id="card1-desc">Sign up and build a professional profile displaying your skills, expertise, and portfolio.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card_num">02</div>
+                    <h3 id="card2-title">Explore Opportunities</h3>
+                    <p id="card2-desc">Browse through verified local jobs, remote options, and freelance gigs across your region.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card_num">03</div>
+                    <h3 id="card3-title">Apply & Work</h3>
+                    <p id="card3-desc">Submit your applications directly to employers and start working on your next big project.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card_num">04</div>
+                    <h3 id="card4-title">Post a Job</h3>
+                    <p id="card4-desc">Submit a detailed job description or a freelance project requirement on our portal for free.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card_num">05</div>
+                    <h3 id="card5-title">Review Talents</h3>
+                    <p id="card5-desc">Filter through qualified applications and check out local freelancer profiles with ratings.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card_num">06</div>
+                    <h3 id="card6-title">Hire the Best</h3>
+                    <p id="card6-desc">Connect directly with the ideal candidates and easily onboard the perfect talent for your business.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- TESTIMONIALS SECTION -->
+    <section id="testimonials" class="testimonials_section">
+        <div class="container">
+            <div class="testimonials_header">
+                <h2>Success Stories</h2>
+                <p>Hear from the local talents and businesses who found success through Eelam Hub</p>
+            </div>
+
+            <div class="testimonials_grid">
+                
+                <div class="testimonial_card">
+                    <div class="quote_icon">“</div>
+                    <p class="user_review">"Eelam Hub completely changed my freelance career. I landed a long-term UI/UX design contract with a top company right from my home in Jaffna."</p>
+                    <div class="user_info">
+                        <img src="images/user1.jpg" alt="Sithushan Profile" class="user_avatar">
+                        <div class="user_details">
+                            <h4>Sithushan K.</h4>
+                            <p class="user_role">UI/UX Designer (Jaffna)</p>
+                            <div class="rating_stars">★★★★★</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial_card">
+                    <div class="quote_icon">“</div>
+                    <p class="user_review">"Finding qualified local developers used to take weeks. Through Eelam Hub, we connected with an incredible talent in Trincomalee within 48 hours!"</p>
+                    <div class="user_info">
+                        <img src="images/user2.jpg" alt="Nirupama Profile" class="user_avatar">
+                        <div class="user_details">
+                            <h4>Nirupama S.</h4>
+                            <p class="user_role">CEO, TechVesta (Trincomalee)</p>
+                            <div class="rating_stars">★★★★★</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial_card">
+                    <div class="quote_icon">“</div>
+                    <p class="user_review">"As a remote content writer, finding trusted clients was hard. Eelam Hub verified the employers, making my job search safe and incredibly easy."</p>
+                    <div class="user_info">
+                        <img src="images/user3.jpg" alt="Ahamed Profile" class="user_avatar">
+                        <div class="user_details">
+                            <h4>Ahamed R.</h4>
+                            <p class="user_role">Content Writer (Batticaloa)</p>
+                            <div class="rating_stars">★★★★★</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- QUOTE SECTION -->
+    <section class="quote_section">
+        <div class="container">
+            <blockquote id="quote-text">
+                "Empowering local communities by bridging the gap between exceptional talent and modern digital opportunities."
+            </blockquote>
+        </div>
+    </section>
+
+
+    <!-- FOOTER SECTION -->
+    <footer class="main_footer" id="contact_footer">
+        <div class="container footer_container">
+            
+            <div class="footer_column brand_info">
+                <!-- திருத்தம்: SEO-விற்காக Alt text வழங்கப்பட்டுள்ளது -->
+                <img src="../logo.png" alt="EelamHUB Brand Logo" width="150px">
+                <h2 class="footer_logo">Eelam<span>HUB</span>.lk</h2>
+                <p class="brand_desc">Connecting top employers and premium local talents across the region on one secure digital ecosystem.</p>
+                
+                <!-- நியூஸ்லெட்டர் படிவம் -->
+                <div class="newsletter_box">
+                    <h4>Subscribe to Job Alerts</h4>
+                    <form action="subscribe.php" method="POST" class="input_group">
+                        <input type="email" name="subscriber_email" placeholder="Enter your email..." required>
+                        <button type="submit" class="subscribe_btn">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer_column">
+                <h3>Job Seekers</h3>
+                <ul class="footer_links">
+                    <li><a href="#explore_districts">Browse Jobs</a></li>
+                    <li><a href="#upload-cv">Upload Resume / CV</a></li>
+                    <li><a href="#remote-gigs">Remote Gigs</a></li>
+                    <li><a href="#freelance-market">Freelance Marketplace</a></li>
+                    <li><a href="#premium-plans">Try Premium</a></li>
+                </ul>
+            </div>
+
+            <div class="footer_column">
+                <h3>Recruiters</h3>
+                <ul class="footer_links">
+                    <li><a href="recruiter_auth.html">Register as Recruiter</a></li>
+                    <li><a href="#post-job">Post a Job</a></li>
+                    <li><a href="#find-talents">Find Local Talent</a></li>
+                    <li><a href="#pricing">Pricing Plans</a></li>
+                    <li><a href="#testimonials">Success Stories</a></li>
+                    <li><a href="#faq">Recruiter FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer_column contact_info">
+                <h3>Support</h3>
+                <ul class="footer_links">
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#contact">Contact Support</a></li>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms & Conditions</a></li>
+                    <li><a href="#feedback">Feedback</a></li>
+                </ul>
+                <div class="office_details">
+                    <p>📍 22/4, Station Road, Jaffna, Sri Lanka</p>
+                    <p>📞 +94 21 742 2414</p>
+                    <p>✉️ support@eelamhub.com</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="bottom_footer">
+            <div class="container bottom_container">
+                <p>&copy; 2026 EelamHUB (Pvt) Ltd. All Rights Reserved.</p>
+                
+                <div class="footer_socials">
+                    <a href="#linkedin" aria-label="LinkedIn"><i>in</i></a>
+                    <a href="#facebook" aria-label="Facebook"><i>f</i></a>
+                    <a href="#twitter" aria-label="X / Twitter"><i>𝕏</i></a>
+                    <a href="#instagram" aria-label="Instagram"><i>ig</i></a>
+                    <a href="#youtube" aria-label="YouTube"><i>yt</i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ஜாவாஸ்கிரிப்ட் இணைப்பு -->
+    <script src="../JS/index.js"></script>
+</body>
+</html>

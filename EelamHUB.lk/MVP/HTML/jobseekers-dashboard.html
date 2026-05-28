@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Seeker Dashboard | EelamHUB.lk</title>
+    <link rel="icon" href="../logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           1. ROOT & GLOBAL STYLES
+           ========================================================================== */
+        :root {
+            --primary: #00d4ff;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --glass: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #facc15;
+            --sidebar-width: 260px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--dark-bg); color: var(--text-main); min-height: 100vh; display: flex; overflow-x: hidden; }
+
+        /* ==========================================================================
+           2. SIDEBAR NAVIGATION
+           ========================================================================== */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--card-bg);
+            border-right: 1px solid var(--glass);
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            padding: 25px 20px;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #fff;
+            text-decoration: none;
+        }
+        .sidebar .logo span { color: var(--primary); }
+
+        .nav-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-item.active a, .nav-item a:hover {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary);
+        }
+
+        .sidebar-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--glass); list-style: none; }
+        .logout-btn { color: var(--danger) !important; cursor: pointer; }
+        .logout-btn:hover { background: rgba(239, 68, 68, 0.1) !important; }
+
+        /* ==========================================================================
+           3. MAIN CONTENT AREA
+           ========================================================================== */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px;
+            background: var(--dark-bg);
+            transition: all 0.3s ease;
+        }
+
+        /* --- Top Dashboard Header & Controls --- */
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            gap: 20px;
+        }
+        .welcome-box h1 { font-size: 1.8rem; font-weight: 600; margin-bottom: 5px; }
+        .welcome-box p { color: var(--text-dim); font-size: 0.9rem; }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Language Selector In Dashboard */
+        .lang_bar { display: flex; background: var(--card-bg); padding: 4px; border-radius: 8px; border: 1px solid var(--glass); }
+        .lang_btn {
+            background: transparent; border: none; color: var(--text-dim); padding: 6px 12px;
+            font-size: 0.8rem; cursor: pointer; border-radius: 6px; transition: 0.3s;
+        }
+        .lang_btn.active, .lang_btn:hover { background: var(--glass); color: var(--primary); }
+
+        .user-profile-widget {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--card-bg);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid var(--glass);
+        }
+        .user-profile-widget img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
+        .user-info span { display: block; font-size: 0.85rem; font-weight: 600; }
+        .user-info small { color: var(--text-dim); font-size: 0.75rem; }
+
+        /* --- Analytical Statistics Grid --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid var(--glass);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.3s ease;
+        }
+        .stat-card:hover { transform: translateY(-3px); border-color: rgba(0, 212, 255, 0.3); }
+        .stat-details h3 { font-size: 2rem; font-weight: 700; margin-bottom: 5px; }
+        .stat-details p { color: var(--text-dim); font-size: 0.85rem; font-weight: 500; }
+        .stat-icon {
+            width: 55px; height: 55px; border-radius: 15px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+        }
+        .icon-blue { background: rgba(0, 212, 255, 0.1); color: var(--primary); }
+        .icon-green { background: rgba(34, 197, 94, 0.1); color: var(--success); }
+        .icon-yellow { background: rgba(250, 204, 21, 0.1); color: var(--warning); }
+
+        /* ==========================================================================
+           4. TWO-COLUMN DASHBOARD LAYOUT
+           ========================================================================== */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .section-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .section-title i { color: var(--primary); }
+
+        .applications-panel, .profile-strength-panel, .recommended-jobs-panel {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid var(--glass);
+        }
+
+        .jobs-table-wrapper { overflow-x: auto; }
+        .jobs-table { width: 100%; border-collapse: collapse; text-align: left; min-width: 500px; }
+        .jobs-table th, .jobs-table td { padding: 15px; border-bottom: 1px solid var(--glass); font-size: 0.9rem; }
+        .jobs-table th { color: var(--text-dim); font-weight: 500; }
+        
+        .company-meta { display: flex; align-items: center; gap: 10px; }
+        .company-logo-placeholder { width: 35px; height: 35px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary); }
+
+        /* Status Badges */
+        .status-badge { padding: 5px 12px; border-radius: 30px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
+        .status-badge.approved { background: rgba(34, 197, 94, 0.1); color: var(--success); }
+        .status-badge.pending { background: rgba(250, 204, 21, 0.1); color: var(--warning); }
+        .status-badge.reviewing { background: rgba(0, 212, 255, 0.1); color: var(--primary); }
+
+        /* --- Right Sidebar Components --- */
+        .right-column { display: flex; flex-direction: column; gap: 30px; }
+
+        /* Profile Strength Meter Widget */
+        .progress-circle-box { display: flex; flex-direction: column; align-items: center; text-align: center; margin: 15px 0; }
+        .progress-bar-linear { width: 100%; background: var(--dark-bg); height: 8px; border-radius: 5px; overflow: hidden; margin: 15px 0 10px 0; }
+        .progress-fill { height: 100%; background: var(--primary); width: 85%; border-radius: 5px; box-shadow: 0 0 10px var(--primary); }
+
+        /* Recommended Jobs Widget */
+        .rec-job-list { display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
+        .rec-job-card {
+            background: var(--dark-bg);
+            padding: 15px;
+            border-radius: 14px;
+            border: 1px solid var(--glass);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+        .rec-job-card:hover { border-color: var(--primary); }
+        .rec-job-info h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 3px; }
+        .rec-job-info p { color: var(--text-dim); font-size: 0.75rem; }
+        .apply-now-btn { background: rgba(0, 212, 255, 0.1); color: var(--primary); border: none; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .apply-now-btn:hover { background: var(--primary); color: #000; }
+
+        /* ==========================================================================
+           5. RESPONSIVE DESIGN (MOBILE ADAPTIBILITY)
+           ========================================================================== */
+        @media (max-width: 1024px) {
+            .dashboard-layout { grid-template-columns: 1fr; }
+            .sidebar { width: 70px; padding: 25px 10px; }
+            .sidebar .logo, .nav-item span { display: none; }
+            .main-content { margin-left: 70px; padding: 25px; }
+            .nav-item a { justify-content: center; padding: 15px; }
+        }
+
+        @media (max-width: 768px) {
+            .dash-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .header-right { width: 100%; justify-content: space-between; flex-wrap: wrap; }
+            .user-profile-widget { order: 1; }
+            .lang_bar { order: 2; }
+        }
+
+        @media (max-width: 480px) {
+            .main-content { padding: 15px; }
+            .header-right { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .user-profile-widget { width: 100%; justify-content: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <a href="#" class="logo">EelamHUB<span>.lk</span></a>
+        <ul class="nav-links">
+            <li class="nav-item active">
+                <a href="#"><i class="fas fa-chart-pie"></i> <span data-i18n="navDash">Dashboard</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#"><i class="fas fa-search"></i> <span data-i18n="navSearch">Search Jobs</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#"><i class="fas fa-file-invoice"></i> <span data-i18n="navApps">My Applications</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#"><i class="fas fa-user-tie"></i> <span data-i18n="navProfile">Edit Profile</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#"><i class="fas fa-wallet"></i> <span data-i18n="navPayouts">Payout Earnings</span></a>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="nav-item logout-btn">
+                <a href="jobseeker_register.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span data-i18n="navLogout">Logout</span></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="main-content">
+        
+        <header class="dash-header">
+            <div class="welcome-box">
+                <h1 id="welcomeText">Welcome Back, <span style="color: var(--primary);" id="seekerName">John Doe</span>!</h1>
+                <p id="welcomeSubtext" data-i18n="welcomeSubtext">Track your professional growth, job matches, and payouts inside EelamHUB.</p>
+            </div>
+            
+            <div class="header-right">
+                <!-- Lang Selector -->
+                <div class="lang_bar">
+                    <button onclick="changeLanguage('ta')" id="btn-ta" class="lang_btn">தமிழ்</button>
+                    <button onclick="changeLanguage('en')" id="btn-en" class="lang_btn active">English</button>
+                    <button onclick="changeLanguage('si')" id="btn-si" class="lang_btn">සිංහල</button>
+                </div>
+
+                <!-- User Profile -->
+                <div class="user-profile-widget">
+                    <img src="https://via.placeholder.com/150" alt="Job Seeker Avatar" id="userAvatar">
+                    <div class="user-info">
+                        <span id="widgetName">John Doe</span>
+                        <small>ID: EH-98245</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- STATISTICS GRID -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-details">
+                    <h3 id="statApplied">12</h3>
+                    <p data-i18n="statAppliedText">Total Applied</p>
+                </div>
+                <div class="stat-icon icon-blue"><i class="fas fa-paper-plane"></i></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-details">
+                    <h3 id="statInterviews" style="color: var(--warning);">3</h3>
+                    <p data-i18n="statInterviewsText">Interviews Scheduled</p>
+                </div>
+                <div class="stat-icon icon-yellow"><i class="fas fa-calendar-alt"></i></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-details">
+                    <h3 id="statApproved" style="color: var(--success);">2</h3>
+                    <p data-i18n="statApprovedText">Jobs Approved</p>
+                </div>
+                <div class="stat-icon icon-green"><i class="fas fa-check-double"></i></div>
+            </div>
+        </section>
+
+        <!-- TWO COLUMN LAYOUT -->
+        <div class="dashboard-layout">
+            
+            <!-- Left Panel: Applications -->
+            <div class="left-column">
+                <div class="applications-panel">
+                    <div class="section-title">
+                        <i class="fas fa-briefcase"></i> <span data-i18n="tablePanelTitle">Recent Job Applications</span>
+                    </div>
+                    <div class="jobs-table-wrapper">
+                        <table class="jobs-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="thCompany">Company</th>
+                                    <th data-i18n="thPosition">Position</th>
+                                    <th data-i18n="thMode">Mode</th>
+                                    <th data-i18n="thStatus">Status</th>
+                                </tr>
+                            </
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="company-meta">
+                                        <div class="company-logo-placeholder">A</div>
+                                        <span>Axiata Digital</span>
+                                    </td>
+                                    <td>UI/UX Designer</td>
+                                    <td data-i18n="modeRemote">Remote</td>
+                                    <td><span class="status-badge approved" data-i18n="statusApproved">Approved</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="company-meta">
+                                        <div class="company-logo-placeholder">W</div>
+                                        <span>WSP Lanka</span>
+                                    </td>
+                                    <td>Frontend Developer</td>
+                                    <td data-i18n="modeHybrid">Hybrid</td>
+                                    <td><span class="status-badge pending" data-i18n="statusPending">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="company-meta">
+                                        <div class="company-logo-placeholder">S</div>
+                                        <span>Suren Cooke SaaS</span>
+                                    </td>
+                                    <td>QA Engineer</td>
+                                    <td data-i18n="modeOnsite">On-site</td>
+                                    <td><span class="status-badge reviewing" data-i18n="statusReviewing">Reviewing</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column Widgets -->
+            <div class="right-column">
+                
+                <!-- Profile Strength -->
+                <div class="profile-strength-panel">
+                    <div class="section-title">
+                        <i class="fas fa-shield-alt"></i> <span data-i18n="profileStrengthTitle">Profile Authenticity</span>
+                    </div>
+                    <div class="progress-circle-box">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">85%</div>
+                        <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 2px;" data-i18n="profileStrengthLabel">Profile Strength</div>
+                    </div>
+                    <div class="progress-bar-linear">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--text-dim); text-align: center; line-height: 1.4;" id="strengthTip" data-i18n="strengthTip">
+                        Add your Bank Book Photo and Portfolio link to hit <span style="color: var(--success);">100% verified status</span>.
+                    </p>
+                </div>
+
+                <!-- Premium Matches -->
+                <div class="recommended-jobs-panel">
+                    <div class="section-title">
+                        <i class="fas fa-bolt"></i> <span data-i18n="premiumMatchesTitle">Premium Matches</span>
+                    </div>
+                    <div class="rec-job-list">
+                        <div class="rec-job-card">
+                            <div class="rec-job-info">
+                                <h4>Product Designer</h4>
+                                <p>Dialog PLC • LKR 180,000</p>
+                            </div>
+                            <button class="apply-now-btn" data-i18n="btnApply">Apply</button>
+                        </div>
+                        <div class="rec-job-card">
+                            <div class="rec-job-info">
+                                <h4>Full Stack Dev</h4>
+                                <p>IFS Sri Lanka • LKR 250,000</p>
+                            </div>
+                            <button class="apply-now-btn" data-i18n="btnApply">Apply</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // பன்மொழித் தரவு அணி (Dynamic Dictionary)
+        const languageData = {
+            en: {
+                navDash: "Dashboard",
+                navSearch: "Search Jobs",
+                navApps: "My Applications",
+                navProfile: "Edit Profile",
+                navPayouts: "Payout Earnings",
+                navLogout: "Logout",
+                welcomeSubtext: "Track your professional growth, job matches, and payouts inside EelamHUB.",
+                statAppliedText: "Total Applied",
+                statInterviewsText: "Interviews Scheduled",
+                statApprovedText: "Jobs Approved",
+                tablePanelTitle: "Recent Job Applications",
+                thCompany: "Company",
+                thPosition: "Position",
+                thMode: "Mode",
+                thStatus: "Status",
+                modeRemote: "Remote",
+                modeHybrid: "Hybrid",
+                modeOnsite: "On-site",
+                statusApproved: "Approved",
+                statusPending: "Pending",
+                statusReviewing: "Reviewing",
+                profileStrengthTitle: "Profile Authenticity",
+                profileStrengthLabel: "Profile Strength",
+                premiumMatchesTitle: "Premium Matches",
+                btnApply: "Apply",
+                welcomePrefix: "Welcome Back, ",
+                strengthTip: "Add your Bank Book Photo and Portfolio link to hit <span style='color: var(--success);'>100% verified status</span>."
+            },
+            ta: {
+                navDash: "டாஷ்போர்டு",
+                navSearch: "வேலை தேடல்கள்",
+                navApps: "எனது விண்ணப்பங்கள்",
+                navProfile: "சுயவிவரம் திருத்து",
+                navPayouts: "வருவாய் பேஅவுட்",
+                navLogout: "வெளியேறு",
+                welcomeSubtext: "உங்கள் தொழில்முறை வளர்ச்சி, வேலைப் பொருத்தங்கள் மற்றும் வருவாய்களை EelamHUB இல் கண்காணிக்கவும்.",
+                statAppliedText: "மொத்தம் விண்ணப்பித்தவை",
+                statInterviewsText: "திட்டமிடப்பட்ட நேர்காணல்கள்",
+                statApprovedText: "அங்கீகரிக்கப்பட்ட வேலைகள்",
+                tablePanelTitle: "சமீபத்திய வேலை விண்ணப்பங்கள்",
+                thCompany: "நிறுவனம்",
+                thPosition: "பதவி",
+                thMode: "வகை",
+                thStatus: "நிலை",
+                modeRemote: "ரிமோட்",
+                modeHybrid: "ஹைப்ரிட்",
+                modeOnsite: "ஆன்-சைட்",
+                statusApproved: "அங்கீகரிக்கப்பட்டது",
+                statusPending: "நிலுவையில் உள்ளது",
+                statusReviewing: "பரிசீலனையில் உள்ளது",
+                profileStrengthTitle: "சுயவிவர நம்பகத்தன்மை",
+                profileStrengthLabel: "சுயவிவர பலம்",
+                premiumMatchesTitle: "பிரீமியம் பொருத்தங்கள்",
+                btnApply: "விண்ணப்பி",
+                welcomePrefix: "மீண்டும் வருக, ",
+                strengthTip: "<span style='color: var(--success);'>100% சரிபார்க்கப்பட்ட நிலையை</span> அடைய உங்கள் வங்கி கணக்கு புத்தக புகைப்படம் மற்றும் போர்ட்ஃபோலியோ இணைப்பைச் சேர்க்கவும்."
+            },
+            si: {
+                navDash: "දත්ත පුවරුව",
+                navSearch: "රැකියා සොයන්න",
+                navApps: "මගේ අයදුම්පත්",
+                navProfile: "පැතිකඩ සංස්කරණය",
+                navPayouts: "ආදායම් ගෙවීම්",
+                navLogout: "නික්ම යන්න",
+                welcomeSubtext: "ඔබේ වෘත්තීය වර්ධනය, ගැලපෙන රැකියා සහ ගෙවීම් EelamHUB තුළ නිරීක්ෂණය කරන්න.",
+                statAppliedText: "මුළු අයදුම්පත්",
+                statInterviewsText: "සම්මුඛ පරීක්ෂණ",
+                statApprovedText: "අනුමත රැකියා",
+                tablePanelTitle: "මෑතකාලීන රැකියා අයදුම්පත්",
+                thCompany: "සමාගම",
+                thPosition: "තනතුර",
+                thMode: "ක්‍රමය",
+                thStatus: "තත්ත්වය",
+                modeRemote: "දුරස්ථ",
+                modeHybrid: "හයිබ්‍රිඩ්",
+                modeOnsite: "ක්ෂේත්‍රයේ",
+                statusApproved: "අනුමතයි",
+                statusPending: "පොරොත්තු වෙමින්",
+                statusReviewing: "සලකා බලමින්",
+                profileStrengthTitle: "පැතිකඩෙහි විශ්වාසනීයත්වය",
+                profileStrengthLabel: "පැතිකඩ ශක්තිය",
+                premiumMatchesTitle: "ප්‍රිමියම් ගැලපීම්",
+                btnApply: "අයදුම් කරන්න",
+                welcomePrefix: "සාදරයෙන් පිළිගනිමු, ",
+                strengthTip: "<span style='color: var(--success);'>100% සත්‍යාපිත තත්ත්වයට</span> පත්වීමට ඔබගේ බැංකු පොතේ ඡායාරූපය සහ කළඹ (Portfolio) සබැඳිය එක් කරන්න."
+            }
+        };
+
+        // மொழி மாற்றும்Core லாஜிக்
+        function changeLanguage(lang) {
+            document.querySelectorAll('.lang_btn').forEach(btn => btn.classList.remove('active'));
+            const targetBtn = document.getElementById('btn-' + lang);
+            if (targetBtn) targetBtn.classList.add('active');
+
+            const translations = languageData[lang];
+            if (!translations) return;
+
+            // பொதுவான தரவுகளை மாற்றுதல் (data-i18n அட்ரிபியூட் மூலம்)
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[key]) {
+                    if (key === 'strengthTip') {
+                        element.innerHTML = translations[key]; // HTML உள்ளடக்கத்திற்காக
+                    } else {
+                        element.textContent = translations[key];
+                    }
+                }
+            });
+
+            // பயனர் பெயருடன் வரும் டைனமிக் உரை மாற்றம்
+            const seekerName = document.getElementById('seekerName').textContent;
+            document.getElementById('welcomeText').innerHTML = `${translations.welcomePrefix}<span style="color: var(--primary);">${seekerName}</span>!`;
+
+            // தேர்வை லோக்கல் மெமரியில் சேமித்தல்
+            localStorage.setItem('selectedLanguage', lang);
+        }
+
+        // பக்கம் லෝடாகும் போது இயங்கும் தொடக்கப் பங்க்ஷன்
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+            changeLanguage(savedLang);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Seeker Registration | EelamHUB.lk</title>
+    <link rel="icon" href="../logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/jobseeker_register.css">
+</head>
+<body>
+
+    <header>
+        <div class="container navbar">
+            <a href="index.html" class="logo_wrapper">
+                <div class="logo">EelamHUB<span>.lk</span></div>
+            </a>
+            <div class="nav_controls">
+                <a href="#contact_footer" class="contact_btn">Contact Us</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stepper Progress Container -->
+    <div class="stepper-container">
+        <div class="stepper">
+            <div class="step-progress-line" id="progressLine"></div>
+            <div class="step-item active" id="step1-indicator"><div class="step-circle">1</div><div class="step-label">Account</div></div>
+            <div class="step-item" id="step2-indicator"><div class="step-circle">2</div><div class="step-label">Personal Info</div></div>
+            <div class="step-item" id="step3-indicator"><div class="step-circle">3</div><div class="step-label">Verification</div></div>
+            <div class="step-item" id="step4-indicator"><div class="step-circle">4</div><div class="step-label">Bank Details</div></div>
+            <div class="step-item" id="step5-indicator"><div class="step-circle">5</div><div class="step-label">Agreement</div></div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <form id="regForm" onsubmit="return false;">
+
+            <!-- STEP 1: Account Info -->
+            <div class="form-step active" id="step1">
+                <h2>Account Registration</h2>
+                <p class="step-desc">Verify your email to setup a secure password.</p>
+                
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <div class="verification-box">
+                        <input type="email" id="email" placeholder="name@example.com" required>
+                        <button type="button" class="btn-verify" id="sendEmailOtpBtn" onclick="sendEmailOTP()">Send OTP</button>
+                    </div>
+                    <div class="error-msg" id="email-error">Please enter a valid email address.</div>
+                    <div class="verified-badge" id="email-verified-lbl"><i class="fas fa-check-circle"></i> Email Verified Successfully!</div>
+                </div>
+
+                <div class="form-group" id="emailOtpGroup" style="display:none;">
+                    <label>Enter 6-Digit Email OTP</label>
+                    <div class="verification-box">
+                        <input type="text" id="emailOtp" placeholder="XXXXXX" maxlength="6">
+                        <button type="button" class="btn-verify" onclick="verifyEmailOTP()">Verify Code</button>
+                    </div>
+                    <div class="error-msg" id="email-otp-error">Incorrect OTP code. Please try again.</div>
+                </div>
+
+                <div id="passwordSection" style="display: none; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="password-field-wrapper">
+                            <input type="password" id="password" placeholder="Create strong password" oninput="checkPasswordStrength()" required>
+                            <i class="far fa-eye eye-icon" id="togglePassword" onclick="togglePasswordVisibility('password', 'togglePassword')"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label>Re-Type Password</label>
+                        <div class="password-field-wrapper">
+                            <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                            <i class="far fa-eye eye-icon" id="toggleConfirmPassword" onclick="togglePasswordVisibility('confirmPassword', 'toggleConfirmPassword')"></i>
+                        </div>
+                        <div class="error-msg" id="password-error">Password must fulfill all requirements below.</div>
+                        <div class="error-msg" id="password-match-error">Passwords do not match!</div>
+                        
+                        <div class="strength-meter">
+                            <div id="strength-bar"></div>
+                        </div>
+                        <span id="strength-text" style="font-size: 0.8rem; font-weight: 600; display: block; margin-top: 5px;"></span>
+
+                        <ul class="password-requirements">
+                            <li id="req-length"><i class="fas fa-circle"></i> At least 8 characters</li>
+                            <li id="req-upper"><i class="fas fa-circle"></i> At least one uppercase letter (A-Z)</li>
+                            <li id="req-number"><i class="fas fa-circle"></i> At least one number (0-9)</li>
+                            <li id="req-special"><i class="fas fa-circle"></i> At least one special character (@, #, $, etc.)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div id="googleAuthSection" style="text-align: center; color: #94a3b8; margin: 20px 0; font-size: 0.85rem;">
+                    <div>OR</div>
+                    <button type="button" class="google-btn" style="margin-top:15px;"><i class="fab fa-google" style="color: #ea4335;"></i> Continue with Google</button>
+                </div>
+            </div>
+
+            <!-- STEP 2: Personal Details -->
+            <div class="form-step" id="step2">
+                <h2>Personal & Professional Details</h2>
+                <p class="step-desc">Provide your official information to establish trust with premium employers.</p>
+                
+                <div class="form-section-title"><i class="fas fa-id-card"></i> Identity & Background</div>
+                
+                <div class="form-group">
+                    <label>Full Name (As in NIC)</label>
+                    <input type="text" id="fullname" placeholder="John Doe" required>
+                    <div class="error-msg" id="name-error">Please enter your complete legal name.</div>
+                </div>
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>NIC Number</label>
+                        <input type="text" id="nic" placeholder="e.g. 199512345678 or 951234567V" maxlength="12" required>
+                        <div class="error-msg" id="nic-error">Please enter a valid Sri Lankan NIC number.</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" id="age" min="16" max="70" placeholder="e.g. 28" required>
+                        <div class="error-msg" id="age-error">Age must be between 16 and 70.</div>
+                    </div>
+                </div>
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>Nationality</label>
+                        <input type="text" id="nationality" value="Sri Lankan" required>
+                        <div class="error-msg" id="nationality-error">Please state your nationality.</div>
+                    </div>
+                    <div class="form-group">
+                        <label>District</label>
+                        <select id="district" required>
+                            <option value="">Select District</option>
+                            <option value="Jaffna">Jaffna</option>
+                            <option value="Kilinochchi">Kilinochchi</option>
+                            <option value="Mullaitivu">Mullaitivu</option>
+                            <option value="Vavuniya">Vavuniya</option>
+                            <option value="Mannar">Mannar</option>
+                            <option value="Batticaloa">Batticaloa</option>
+                            <option value="Ampara">Ampara</option>
+                            <option value="Trincomalee">Trincomalee</option>
+                            <option value="Colombo">Colombo</option>
+                            <option value="Other">Other District</option>
+                        </select>
+                        <div class="error-msg" id="district-error">Please select your residential district.</div>
+                    </div>
+                </div>
+
+                <div class="form-section-title"><i class="fas fa-briefcase"></i> Professional Career Mapping</div>
+                
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>Primary Professional Job</label>
+                        <input type="text" id="profJob" placeholder="e.g. Software Engineer" required>
+                        <div class="error-msg" id="profJob-error">Please define your main profession.</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Years of Experience</label>
+                        <input type="number" id="mainExp" min="0" max="40" placeholder="e.g. 5" required>
+                        <div class="error-msg" id="mainExp-error">Enter valid years of experience.</div>
+                    </div>
+                </div>
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>Side Jobs / Freelance Skills</label>
+                        <input type="text" id="sideJob" placeholder="e.g. UI Designer">
+                    </div>
+                    <div class="form-group">
+                        <label>Side Experience (Years)</label>
+                        <input type="number" id="sideExp" min="0" max="40" placeholder="e.g. 2">
+                    </div>
+                </div>
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>Preferred Work Mode</label>
+                        <div class="radio-group-grid">
+                            <label class="radio-tile"><input type="radio" name="workMode" value="Remote" checked> Remote</label>
+                            <label class="radio-tile"><input type="radio" name="workMode" value="On-site"> On-site</label>
+                            <label class="radio-tile"><input type="radio" name="workMode" value="Hybrid"> Hybrid</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Expected Salary (LKR)</label>
+                        <input type="number" id="expectedSalary" min="0" placeholder="e.g. 150000" required>
+                        <div class="error-msg" id="salary-error">Please provide an expected salary figure.</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>LinkedIn Profile URL</label>
+                    <input type="url" id="linkedinUrl" placeholder="https://www.linkedin.com/in/username">
+                    <div class="error-msg" id="linkedin-error">Please enter a valid LinkedIn URL.</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Language Proficiency Matrix</label>
+                    <div class="table-responsive">
+                        <table class="lang-table">
+                            <thead>
+                                <tr>
+                                    <th>Language</th>
+                                    <th>Speak</th>
+                                    <th>Read</th>
+                                    <th>Write</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Tamil</strong></td>
+                                    <td><input type="checkbox" id="lang-ta-speak" checked></td>
+                                    <td><input type="checkbox" id="lang-ta-read" checked></td>
+                                    <td><input type="checkbox" id="lang-ta-write" checked></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>English</strong></td>
+                                    <td><input type="checkbox" id="lang-en-speak"></td>
+                                    <td><input type="checkbox" id="lang-en-read"></td>
+                                    <td><input type="checkbox" id="lang-en-write"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sinhala</strong></td>
+                                    <td><input type="checkbox" id="lang-si-speak"></td>
+                                    <td><input type="checkbox" id="lang-si-read"></td>
+                                    <td><input type="checkbox" id="lang-si-write"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-section-title"><i class="fas fa-camera"></i> Official Profile Photo</div>
+                <div class="photo-upload-container">
+                    <div class="photo-preview-box" id="photoPreview">
+                        <i class="fas fa-user" id="avatarIcon"></i>
+                        <img id="previewImg" src="" alt="Profile Preview" style="display: none;">
+                    </div>
+                    <div class="upload-controls">
+                        <label for="profilePhoto" class="upload-btn-label">Choose Official Photo</label>
+                        <input type="file" id="profilePhoto" accept="image/jpeg, image/png" style="display: none;" onchange="previewProfilePhoto(this)">
+                        <div class="upload-hint">Passport-sized photo (JPG/PNG, Max 2MB).</div>
+                        <div class="error-msg" id="photo-error">Please upload a valid profile photo (Max 2MB).</div>
+                    </div>
+                </div>
+
+                <div class="form-section-title"><i class="fas fa-address-book"></i> Communication & Verification</div>
+                
+                <div class="form-group">
+                    <label>Home Address (Permanent)</label>
+                    <input type="text" id="homeAddress" placeholder="Door No, Street Name, City" required>
+                    <div class="error-msg" id="homeAddress-error">Permanent home address is required.</div>
+                </div>
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>Personal Mobile Number</label>
+                        <input type="tel" id="personalMobile" placeholder="07XXXXXXXX" required>
+                        <div class="error-msg" id="personalMobile-error">Enter a valid phone number (e.g., 0771234567).</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Official WhatsApp Number</label>
+                        <input type="tel" id="whatsappNo" placeholder="07XXXXXXXX" required>
+                        <div class="error-msg" id="whatsapp-error">Enter a valid WhatsApp number.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: OTP Verification -->
+            <div class="form-step" id="step3">
+                <h2>Security Verification</h2>
+                <p class="step-desc">Two-factor validation for authentic profiles.</p>
+                <div class="form-group">
+                    <label>Verify Registered Mobile</label>
+                    <div class="verification-box">
+                        <input type="tel" id="mobile" placeholder="Mobile Number" readonly>
+                        <button type="button" class="btn-verify" onclick="sendOTP()">Send Mobile OTP</button>
+                    </div>
+                </div>
+                <div class="form-group" id="otpGroup" style="display:none; margin-top: 15px;">
+                    <label>Enter 4-Digit OTP Code</label>
+                    <div class="verification-box">
+                        <input type="text" id="otp" placeholder="XXXX" maxlength="4">
+                        <button type="button" class="btn-verify" onclick="verifyMobileOTP()">Verify OTP</button>
+                    </div>
+                    <div class="error-msg" id="mobile-otp-error">Invalid OTP! (Use 1234 for testing)</div>
+                    <div class="verified-badge" id="mobile-verified-lbl"><i class="fas fa-check-circle"></i> Mobile Number Verified!</div>
+                </div>
+            </div>
+
+            <!-- STEP 4: Bank Details -->
+            <div class="form-step" id="step4">
+                <h2>Bank Account Details</h2>
+                <p class="step-desc">Required to receive direct secure payouts from clients.</p>
+                <div class="form-group">
+                    <label>Bank Name</label>
+                    <select id="bank" required>
+                        <option value="">Select Bank</option>
+                        <option value="Commercial Bank">Commercial Bank</option>
+                        <option value="BOC">Bank of Ceylon (BOC)</option>
+                        <option value="HNB">Hatton National Bank (HNB)</option>
+                        <option value="Peoples Bank">People's Bank</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Account Holder Name</label>
+                    <input type="text" id="accName" placeholder="Exact name on bank book" required>
+                    <div class="error-msg" id="bankname-error">Please enter account holder name.</div>
+                </div>
+                <div class="form-group">
+                    <label>Account Number</label>
+                    <input type="text" id="accNo" placeholder="00123456789" required>
+                    <div class="error-msg" id="bankno-error">Please enter your bank account number.</div>
+                </div>
+            </div>
+
+            <!-- STEP 5: Terms Agreement -->
+            <div class="form-step" id="step5">
+                <h2>User Agreement</h2>
+                <p class="step-desc">Review and accept terms to complete integration.</p>
+                <div class="terms-box">
+                    <p><strong>1. Introduction</strong><br>Welcome to EelamHUB.lk. By signing up, you agree to comply with our security protocols and authentic service conditions...</p><br>
+                    <p><strong>2. Secure Payouts</strong><br>All bank transfers are encrypted and monitored under strict financial guardrails to prevent escrow fraud...</p><br>
+                    <p><strong>3. Profile Veracity</strong><br>Providing fake NIC or contact data will lead to permanent account deactivation without notice.</p>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">I completely agree to the terms and data privacy conditions.</label>
+                </div>
+                <div class="error-msg" id="terms-error">You must accept the terms to proceed.</div>
+            </div>
+
+            <!-- Form Navigation Buttons -->
+            <div class="btn-controls">
+                <button type="button" class="btn-nav btn-prev" id="prevBtn" onclick="changeStep(-1)">Previous</button>
+                <button type="button" class="btn-nav btn-next" id="nextBtn" onclick="changeStep(1)">Next Step</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="../JS/jobseeker_register.js"></script>
+</body>
+</html>

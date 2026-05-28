@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiter Dashboard | EelamHUB.lk</title>
+    <link rel="icon" href="../logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           1. ROOT SYSTEM & CORE LAYOUT
+           ========================================================================== */
+        :root {
+            --primary: #00d4ff;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --glass: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --success: #22c55e;
+            --warning: #facc15;
+            --danger: #ef4444;
+            --sidebar-width: 260px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--dark-bg); color: var(--text-main); min-height: 100vh; display: flex; overflow-x: hidden; }
+
+        /* Mobile Top Bar (Hamburger Menu) */
+        .mobile-header {
+            display: none;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 99;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass);
+        }
+        .mobile-header .logo { font-size: 1.3rem; font-weight: 700; color: #fff; text-decoration: none; }
+        .mobile-header .logo span { color: var(--primary); }
+        .menu-toggle { background: transparent; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+
+        /* ==========================================================================
+           2. SIDEBAR NAVIGATION CONTROLS
+           ========================================================================== */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--card-bg);
+            border-right: 1px solid var(--glass);
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            padding: 25px 20px;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+        .sidebar .logo { font-size: 1.5rem; font-weight: 700; color: #fff; text-decoration: none; margin-bottom: 40px; }
+        .sidebar .logo span { color: var(--primary); }
+
+        .nav-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .nav-item { cursor: pointer; }
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-item.active a, .nav-item a:hover {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary);
+        }
+        .sidebar-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--glass); }
+
+        /* Overlay background when mobile menu is active */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 98;
+        }
+
+        /* ==========================================================================
+           3. MAIN CONTAINER CONTENT AREA
+           ========================================================================== */
+        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 40px; width: calc(100% - var(--sidebar-width)); }
+        
+        .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; gap: 20px; }
+        .welcome-box h1 { font-size: 1.8rem; font-weight: 600; }
+        .corporate-badge { background: var(--card-bg); padding: 10px 20px; border-radius: 50px; border: 1px solid var(--glass); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+        .corporate-badge i { color: var(--primary); }
+
+        /* Dynamic App Views (Tabs) */
+        .tab-view { display: none; animation: fadeIn 0.4s ease; }
+        .tab-view.active-view { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Statistics Summary Cards */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .stat-card { background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--glass); display: flex; align-items: center; justify-content: space-between; }
+        .stat-details h3 { font-size: 2rem; font-weight: 700; }
+        .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; background: rgba(0, 212, 255, 0.1); color: var(--primary); }
+
+        /* ==========================================================================
+           4. WORKSPACE COMPONENT STYLES (FORMS & TABLES)
+           ========================================================================== */
+        .form-panel, .table-panel { background: var(--card-bg); padding: 35px; border-radius: 24px; border: 1px solid var(--glass); margin-top: 20px; }
+        .panel-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 25px; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        
+        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 0.85rem; color: var(--text-dim); }
+        input, select, textarea { width: 100%; background: var(--dark-bg); border: 1px solid var(--glass); padding: 12px 15px; border-radius: 10px; color: white; outline: none; transition: 0.3s; font-size: 0.95rem; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+        
+        .btn-post { background: var(--primary); color: #000; border: none; padding: 14px 30px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-block; }
+        .btn-post:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3); }
+
+        .quick-actions-flex { display: flex; gap: 15px; flex-wrap: wrap; }
+
+        /* Workers Grid View Matrix */
+        .workers-matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
+        .worker-card { background: var(--card-bg); border: 1px solid var(--glass); padding: 25px; border-radius: 20px; transition: 0.3s; position: relative; }
+        .worker-card:hover { border-color: var(--primary); transform: translateY(-3px); }
+        
+        .worker-profile { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .worker-avatar { width: 55px; height: 55px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--primary); border: 2px solid var(--primary); flex-shrink: 0; }
+        .worker-meta h4 { font-size: 1rem; font-weight: 600; }
+        .worker-meta p { color: var(--text-dim); font-size: 0.8rem; }
+        
+        .worker-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        .tag { background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 30px; font-size: 0.75rem; color: var(--text-dim); }
+        
+        .btn-hire { width: 100%; background: rgba(34, 197, 94, 0.1); color: var(--success); border: 1px solid var(--success); padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-hire:hover { background: var(--success); color: #fff; }
+        
+        .hired-badge { position: absolute; top: 15px; right: 15px; background: rgba(34, 197, 94, 0.2); color: var(--success); padding: 3px 10px; border-radius: 30px; font-size: 0.7rem; font-weight: 600; display: none; }
+
+        /* ==========================================================================
+           5. RESPONSIVE MEDIA QUERIES (MOBILE BREAKPOINTS)
+           ========================================================================== */
+        @media (max-width: 991px) {
+            .sidebar { transform: translateX(-100%); } /* சைட்பார் மறையும் */
+            .sidebar.open { transform: translateX(0); } /* கிளிக் செய்யும்போது தோன்றும் */
+            .sidebar-overlay.show { display: block; }
+            .main-content { margin-left: 0; width: 100%; padding: 100px 20px 40px 20px; }
+            .mobile-header { display: flex; }
+        }
+
+        @media (max-width: 650px) {
+            .dash-header { flex-direction: column; align-items: flex-start; }
+            .corporate-badge { width: 100%; justify-content: center; }
+            .form-grid-2 { grid-template-columns: 1fr; gap: 0; }
+            .form-panel { padding: 20px; }
+            .btn-post { width: 100%; text-align: center; }
+            .quick-actions-flex { flex-direction: column; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-header">
+        <a href="#" class="logo">EelamHUB<span>.lk</span></a>
+        <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <aside class="sidebar" id="sidebarMenu">
+        <a href="#" class="logo">EelamHUB<span>.lk</span></a>
+        <ul class="nav-links">
+            <li class="nav-item active" id="nav-dash" onclick="switchTab('overview')">
+                <a href="#"><i class="fas fa-chart-pie"></i> <span>Overview</span></a>
+            </li>
+            <li class="nav-item" id="nav-post" onclick="switchTab('poster')">
+                <a href="#"><i class="fas fa-plus-circle"></i> <span>Post a New Job</span></a>
+            </li>
+            <li class="nav-item" id="nav-workers" onclick="switchTab('workers')">
+                <a href="#"><i class="fas fa-users"></i> <span>Find Workers</span></a>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <a href="recruiter_auth.html" style="color: var(--danger); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 10px;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="dash-header">
+            <div class="welcome-box">
+                <h1>Workspace Recruiter Node</h1>
+                <p style="color: var(--text-dim); font-size: 0.9rem;">Source talent, manage postings, and trigger contract hires.</p>
+            </div>
+            <div class="corporate-badge">
+                <i class="fas fa-building"></i>
+                <span id="companyNameDisplay">Sipiraj Solutions</span>
+            </div>
+        </header>
+
+        <div id="view-overview" class="tab-view active-view">
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-details">
+                        <h3 id="count-jobs">4</h3>
+                        <p style="color: var(--text-dim); font-size: 0.85rem; margin-top:3px;">Active Job Postings</p>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-details">
+                        <h3 id="count-hired" style="color: var(--success);">18</h3>
+                        <p style="color: var(--text-dim); font-size: 0.85rem; margin-top:3px;">Total Workers Hired</p>
+                    </div>
+                    <div class="stat-icon" style="color: var(--success); background:rgba(34,197,94,0.1);"><i class="fas fa-user-check"></i></div>
+                </div>
+            </section>
+
+            <div class="table-panel">
+                <div class="panel-title"><i class="fas fa-bolt"></i> Quick Actions</div>
+                <div class="quick-actions-flex">
+                    <button class="btn-post" onclick="switchTab('poster')">Post a Job Alert</button>
+                    <button class="btn-post" onclick="switchTab('workers')" style="background: transparent; border: 1px solid var(--primary); color: var(--primary);">Browse Available Workers</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-poster" class="tab-view">
+            <div class="form-panel">
+                <div class="panel-title"><i class="fas fa-paper-plane"></i> Publish Corporate Job Vacancy</div>
+                
+                <form id="jobPostForm" action="../PHP/submit_job.php" method="POST" onsubmit="return handleJobFormSubmit(event)">
+                    <div class="form-group">
+                        <label for="jobTitle">Job Title / Position</label>
+                        <input type="text" id="jobTitle" name="job_title" placeholder="e.g. Senior Frontend Developer" required>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label for="jobMode">Preferred Work Mode</label>
+                            <select id="jobMode" name="job_mode" required>
+                                <option value="Remote">Remote (Work from Home)</option>
+                                <option value="Hybrid">Hybrid Workspace</option>
+                                <option value="On-site">On-site Office</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="jobSalary">Offered Salary Range (LKR / Monthly)</label>
+                            <input type="text" id="jobSalary" name="job_salary" placeholder="e.g. 150,000 - 200,000" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="jobSkills">Target Core Skills (Comma Separated)</label>
+                        <input type="text" id="jobSkills" name="job_skills" placeholder="e.g. React, Node.js, UI Design" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="jobDesc">Detailed Job Description & Requirements</label>
+                        <textarea id="jobDesc" name="job_desc" rows="5" placeholder="State operational roles and explicit requirements..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-post">Publish Job on EelamHUB</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="view-workers" class="tab-view">
+            <div class="panel-title" style="margin-bottom: 10px;"><i class="fas fa-search"></i> Verified Talents in Sri Lanka</div>
+            <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 25px;">Review background profiles, technical mapping stack and execute instant contract hiring.</p>
+
+            <div class="workers-matrix">
+                <div class="worker-card" id="worker-1">
+                    <span class="hired-badge" id="badge-1">Hired <i class="fas fa-check"></i></span>
+                    <div class="worker-profile">
+                        <div class="worker-avatar"><i class="fas fa-user"></i></div>
+                        <div class="worker-meta">
+                            <h4>Sipiraj S.</h4>
+                            <p>Full Stack Engineer • Jaffna</p>
+                        </div>
+                    </div>
+                    <div class="worker-tags">
+                        <span class="tag">Node.js</span><span class="tag">React</span><span class="tag">MongoDB</span><span class="tag">5 Yrs Exp</span>
+                    </div>
+                    <button class="btn-hire" id="hireBtn-1" onclick="executeHire(1, 'Sipiraj S.')">Hire This Worker</button>
+                </div>
+
+                <div class="worker-card" id="worker-2">
+                    <span class="hired-badge" id="badge-2">Hired <i class="fas fa-check"></i></span>
+                    <div class="worker-profile">
+                        <div class="worker-avatar"><i class="fas fa-user"></i></div>
+                        <div class="worker-meta">
+                            <h4>Kanth A.</h4>
+                            <p>UI/UX Designer • Vavuniya</p>
+                        </div>
+                    </div>
+                    <div class="worker-tags">
+                        <span class="tag">Figma</span><span class="tag">Wireframing</span><span class="tag">Mobile Apps</span><span class="tag">3 Yrs Exp</span>
+                    </div>
+                    <button class="btn-hire" id="hireBtn-2" onclick="executeHire(2, 'Kanth A.')">Hire This Worker</button>
+                </div>
+
+                <div class="worker-card" id="worker-3">
+                    <span class="hired-badge" id="badge-3">Hired <i class="fas fa-check"></i></span>
+                    <div class="worker-profile">
+                        <div class="worker-avatar"><i class="fas fa-user"></i></div>
+                        <div class="worker-meta">
+                            <h4>Sarah P.</h4>
+                            <p>QA Automation Lead • Colombo</p>
+                        </div>
+                    </div>
+                    <div class="worker-tags">
+                        <span class="tag">Selenium</span><span class="tag">Python</span><span class="tag">Jest</span><span class="tag">6 Yrs Exp</span>
+                    </div>
+                    <button class="btn-hire" id="hireBtn-3" onclick="executeHire(3, 'Sarah P.')">Hire This Worker</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Toggle Mobile Sidebar Menu
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebarMenu');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Core Tab Routing System
+        function switchTab(targetTab) {
+            // Remove active tags from all nav items & views
+            document.querySelectorAll('.tab-view').forEach(view => view.classList.remove('active-view'));
+            document.querySelectorAll('.nav-links .nav-item').forEach(item => item.classList.remove('active'));
+            
+            // Set targeted layout active
+            document.getElementById(`view-${targetTab}`).classList.add('active-view');
+            
+            if(targetTab === 'overview') document.getElementById('nav-dash').classList.add('active');
+            if(targetTab === 'poster') document.getElementById('nav-post').classList.add('active');
+            if(targetTab === 'workers') document.getElementById('nav-workers').classList.add('active');
+
+            // மொபைலில் டேப்களை கிளிக் செய்த பின் மெனுவை மூடுதல்
+            const sidebar = document.getElementById('sidebarMenu');
+            const overlay = document.getElementById('sidebarOverlay');
+            if(sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            }
+        }
+
+        // Action 1: Intercept Form & Process Backend Routing 
+        function handleJobFormSubmit(event) {
+            // ஃபார்ம் வெற்றிகரமாக சப்மிட் ஆகும் வரை மெக்கானிசத்தை தற்காலிகமாக அலர்ட்டில் காட்டுகிறோம்
+            const title = document.getElementById('jobTitle').value;
+            alert(`Success! "${title}" job vacancy data validated. Connecting to EelamHUB Backend Node...`);
+            
+            // Update Mock Stats Count for preview
+            let currentJobsCount = parseInt(document.getElementById('count-jobs').innerText);
+            document.getElementById('count-jobs').innerText = currentJobsCount + 1;
+
+            // குறிப்பு: நீங்கள் டேட்டாபேஸை இணைத்த பிறகு நிஜமாகவே சப்மிட் செய்ய கீழே உள்ள வரியை அப்படியே விட்டுவிடுங்கள்
+            // event.preventDefault(); ஐ நீக்கியுள்ளதால் படிவம் சப்மிட் ஆகி '../PHP/submit_job.php' கோப்பிற்குப் போகும்.
+            return true;
+        }
+
+        // Action 2: Professional Worker Hiring Protocol
+        function executeHire(workerId, workerName) {
+            const confirmState = confirm(`Are you sure you want to securely hire ${workerName} for your corporate projects?`);
+            if(confirmState) {
+                // UI Mutation: Change Button properties
+                const hireButton = document.getElementById(`hireBtn-${workerId}`);
+                hireButton.innerText = "Contract Active";
+                hireButton.style.background = "rgba(34, 197, 94, 0.2)";
+                hireButton.style.color = "var(--success)";
+                hireButton.disabled = true;
+                
+                // Expose Top Hired Badge
+                document.getElementById(`badge-${workerId}`).style.display = "block";
+                
+                // Update Dashboard Summary metrics count
+                let currentHiredCount = parseInt(document.getElementById('count-hired').innerText);
+                document.getElementById('count-hired').innerText = currentHiredCount + 1;
+
+                alert(`Secure Allocation Completed! ${workerName} has been notified. Check corporate email for project tracking escrow link.`);
+            }
+        }
+    </script>
+</body>
+</html>

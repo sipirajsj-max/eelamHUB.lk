@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EelamHUB.lk | Join Us</title>
+    <link rel="icon" href="../logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --secondary: #22c55e;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --glass: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--dark-bg); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- Header Styles --- */
+        header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--glass);
+            padding: 15px 0;
+            width: 100%;
+        }
+        .container.navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo_wrapper { text-decoration: none; }
+        .logo { font-size: 1.6rem; font-weight: 700; color: #fff; }
+        .logo span { color: var(--primary); }
+        
+        .nav_controls { display: flex; align-items: center; gap: 15px; }
+        
+        /* Language Bar */
+        .lang_bar { display: flex; background: var(--dark-bg); padding: 4px; border-radius: 8px; border: 1px solid var(--glass); }
+        .lang_btn {
+            background: transparent; border: none; color: var(--text-dim); padding: 6px 12px;
+            font-size: 0.85rem; cursor: pointer; border-radius: 6px; transition: 0.3s;
+        }
+        .lang_btn.active, .lang_btn:hover { background: var(--glass); color: var(--primary); }
+
+        /* --- Main Content (2 Options Section) --- */
+        .main-container {
+             Sherwood: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .main-container h1 { font-size: 2.2rem; margin-bottom: 10px; font-weight: 600; transition: color 0.3s ease; }
+        .main-container p.subtitle { color: var(--text-dim); margin-bottom: 40px; font-size: 1rem; }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+            max-width: 850px;
+        }
+
+        .option-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass);
+            padding: 45px 30px;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        /* Hover Effect */
+        .option-card:hover {
+            transform: translateY(-12px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.1);
+        }
+
+        .option-card.recruiter:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 15px 30px rgba(34, 197, 94, 0.1);
+        }
+
+        /* Icon Container */
+        .icon-circle {
+            width: 80px; height: 80px;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            transition: 0.3s;
+        }
+
+        .recruiter .icon-circle {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--secondary);
+        }
+
+        .option-card:hover .icon-circle {
+            background: var(--primary);
+            color: #000;
+            transform: scale(1.1);
+        }
+
+        .option-card.recruiter:hover .icon-circle {
+            background: var(--secondary);
+            color: #000;
+        }
+
+        .option-card h2 { font-size: 1.4rem; margin-bottom: 12px; font-weight: 600; }
+        .option-card p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 25px; }
+
+        .action-arrow {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .option-card:hover .action-arrow {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+        .option-card.recruiter:hover .action-arrow {
+            color: var(--secondary);
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 768px) {
+            .container.navbar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .options-grid { grid-template-columns: 1fr; gap: 20px; }
+            .main-container h1 { font-size: 1.8rem; }
+            .option-card { padding: 35px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="top_anchor">
+        <div class="container navbar">
+            <a href="#top_anchor" class="logo_wrapper">
+                <div class="logo">EelamHUB<span>.lk</span></div>
+            </a>
+            
+            <div class="nav_controls">
+                <div class="lang_bar">
+                    <button onclick="changeLanguage('ta')" id="btn-ta" class="lang_btn">தமிழ்</button>
+                    <button onclick="changeLanguage('en')" id="btn-en" class="lang_btn active">English</button>
+                    <button onclick="changeLanguage('si')" id="btn-si" class="lang_btn">සිංහල</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <h1 id="main-title" data-i18n="mainTitle">Welcome to EelamHUB.lk</h1>
+        <p class="subtitle" id="main-subtitle" data-i18n="mainSubtitle">Please choose how you want to connect with us today</p>
+
+        <div class="options-grid">
+            
+            <a href="jobseeker_register.html" class="option-card">
+                <div class="icon-circle">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h2 id="seeker-title" data-i18n="seekerTitle">Job Seekers</h2>
+                <p id="seeker-desc" data-i18n="seekerDesc">Build your profile, explore local & remote career opportunities, and apply to top jobs instantly.</p>
+                <div class="action-arrow">
+                    <span id="seeker-btn-text" data-i18n="seekerBtnText">Register as Seeker</span> <i class="fas fa-arrow-right"></i>
+                </div>
+            </a>
+
+            <a href="recruiter_register.html" class="option-card recruiter">
+                <div class="icon-circle">
+                    <i class="fas fa-building"></i>
+                </div>
+                <h2 id="recruiter-title" data-i18n="recruiterTitle">Recruiters</h2>
+                <p id="recruiter-desc" data-i18n="recruiterDesc">Post job openings, discover verified premium talents, and manage your hiring process effortlessly.</p>
+                <div class="action-arrow">
+                    <span id="recruiter-btn-text" data-i18n="recruiterBtnText">Register as Recruiter</span> <i class="fas fa-arrow-right"></i>
+                </div>
+            </a>
+
+        </div>
+    </main>
+
+    <script>
+        // பன்மொழி தரவு அணி (Translation Data Matrix)
+        const languageData = {
+            en: {
+                mainTitle: "Welcome to EelamHUB.lk",
+                mainSubtitle: "Please choose how you want to connect with us today",
+                seekerTitle: "Job Seekers",
+                seekerDesc: "Build your profile, explore local & remote career opportunities, and apply to top jobs instantly.",
+                seekerBtnText: "Register as Seeker",
+                recruiterTitle: "Recruiters",
+                recruiterDesc: "Post job openings, discover verified premium talents, and manage your hiring process effortlessly.",
+                recruiterBtnText: "Register as Recruiter"
+            },
+            ta: {
+                mainTitle: "EelamHUB.lk இற்கு உங்களை வரவேற்கிறோம்",
+                mainSubtitle: "இன்று எங்களுடன் எவ்வாறு இணைய விரும்புகிறீர்கள் என்பதைத் தேர்ந்தெடுக்கவும்",
+                seekerTitle: "வேலை தேடுபவர்கள்",
+                seekerDesc: "உங்கள் சுயவிவரத்தை உருவாக்கி, உள்ளூர் மற்றும் உலகளாவிய வேலை வாய்ப்புகளை ஆராய்ந்து, உடனே விண்ணப்பியுங்கள்.",
+                seekerBtnText: "விண்ணப்பதாரராகப் பதிவு செய்க",
+                recruiterTitle: "வேலை வழங்குபவர்கள்",
+                recruiterDesc: "வேலை அறிவிப்புகளை இடுகையிடவும், சரிபார்க்கப்பட்ட சிறந்த திறமையாளர்களைக் கண்டறியவும், உங்கள் ஆட்சேர்ப்பு செயல்முறையை எளிதாக நிர்வகிக்கவும்.",
+                recruiterBtnText: "நிறுவனமாகப் பதிவு செய்க"
+            },
+            si: {
+                mainTitle: "EelamHUB.lk වෙත ඔබව සාදරයෙන් පිළිගනිමු",
+                mainSubtitle: "අද ඔබ අප හා සම්බන්ධ වීමට කැමති ආකාරය තෝරන්න",
+                seekerTitle: "රැකියා අපේක්ෂකයින්",
+                seekerDesc: "ඔබගේ පැතිකඩ ගොඩනඟන්න, දේශීය හා දුරස්ථ රැකියා අවස්ථා ගවේෂණය කර ක්ෂණිකව අයදුම් කරන්න.",
+                seekerBtnText: "අපේක්ෂකයෙකු ලෙස ලියාපදිංචි වන්න",
+                recruiterTitle: "බඳවා ගන්නන්",
+                recruiterDesc: "රැකියා ඇබෑර්තු පළ කරන්න, සත්‍යාපිත දක්ෂයින් සොයා ගන්න, සහ බඳවා ගැනීමේ ක්‍රියාවලිය පහසුවෙන් කළමනාකරණය කරන්න.",
+                recruiterBtnText: "බඳවා ගන්නෙකු ලෙස ලියාපදිංචි වන්න"
+            }
+        };
+
+        // பன்மொழி மாற்றும் கோர் பங்க்ஷன் (Client-side Router)
+        function changeLanguage(lang) {
+            // ஆக்டிவ் கிளாஸை மாற்றுதல்
+            document.querySelectorAll('.lang_btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById('btn-' + lang);
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            // பக்கத்தில் உள்ள அனைத்து உரைகளையும் மாற்றுதல்
+            const translations = languageData[lang];
+            if (translations) {
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[key]) {
+                        element.textContent = translations[key];
+                    }
+                });
+            }
+            
+            // பயனரின் மொழித் தேர்வை பிரவுசரின் லோக்கல் மெமரியில் (LocalStorage) சேமித்தல்
+            localStorage.setItem('selectedLanguage', lang);
+        }
+
+        // பக்கம் லෝட் ஆகும்போது முன்னரே சேமிக்கப்பட்ட மொழியை இயக்குதல்
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+            changeLanguage(savedLang);
+        });
+    </script>
+</body>
+</html>
